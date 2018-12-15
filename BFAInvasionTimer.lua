@@ -323,7 +323,7 @@ do
 				end
 				Timer(timeLeftSeconds+60, FindInvasion)
 				found = true
-				-- Not fighting a boss, didn't just log in, legion assault has just spawned (7hrs - 10min), feature is enabled
+				-- Not fighting a boss, didn't just log in, assault has just spawned (7hrs - 10min = 24600), feature is enabled
 				if not IsEncounterInProgress() and not justLoggedIn and timeLeftSeconds > 24600 and frame.db.profile.zoneWarnings then
 					FlashClientIcon()
 					local text = "|T%d:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(icons[i], zoneNames[i])
