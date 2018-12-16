@@ -326,7 +326,7 @@ do
 				-- Not fighting a boss, didn't just log in, assault has just spawned (7hrs - 10min = 24600), feature is enabled
 				if not IsEncounterInProgress() and not justLoggedIn and timeLeftSeconds > 24600 and frame.db.profile.zoneWarnings then
 					FlashClientIcon()
-					local text = "|T%d:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(icons[i], zoneNames[i])
+					local text = "|T".. icons[i] ..":15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(zoneNames[i])
 					print("|cFF33FF99BFAInvasionTimer|r:", text)
 					RaidNotice_AddMessage(RaidBossEmoteFrame, text, {r=1, g=1, b=1})
 					PlaySound(8959, "Master", false) -- SOUNDKIT.RAID_WARNING
