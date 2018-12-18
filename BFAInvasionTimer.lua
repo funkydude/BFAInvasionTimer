@@ -367,9 +367,9 @@ do
 				end
 
 				if mode == 2 then
-					StartBroker(NEXT, t, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
+					StartBroker(L.next, t, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
 				else
-					StartBar(NEXT, t, 0, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
+					StartBar(L.next, t, 0, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
 					frame:UnregisterEvent("QUEST_TURNED_IN")
 				end
 
