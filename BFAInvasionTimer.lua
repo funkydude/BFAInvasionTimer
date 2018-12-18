@@ -223,7 +223,7 @@ do
 		elseif rewardQuestID > 0 then -- Invasion duration bars
 			bar:Start(25200) -- 7hrs = 60*6 = 420min = 420*60 = 25,200sec
 		else -- Next invasion bars
-			bar:Start()
+			bar:Start(43200) -- 12hrs = 60*12 = 720min = 720*60 = 43,200sec
 		end
 		RearrangeBar()
 		if hiddenBars then
