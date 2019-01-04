@@ -97,20 +97,31 @@ do
 			if check == "29" then
 				t = t + 60 -- Round up to 00min if we're at 59min
 			end
+			-- Vol'dun 864 > Drustvar 896 > Zuldazar 862 > Tirigarde Sound 895 > Nazmir 863 > Stormsong Valley 942
+			local invadeOrder = {C_Map.GetMapInfo(864).name, C_Map.GetMapInfo(896).name, C_Map.GetMapInfo(862).name, C_Map.GetMapInfo(895).name, C_Map.GetMapInfo(863).name, C_Map.GetMapInfo(942).name}
+			if frame.db.profile.lastInvasionMap then
+				for k,v in pairs(invadeOrder) do
+					if v == frame.db.profile.lastInvasionMap then
+						pos = k
+						-- print(invadeOrder[pos])
+					end
+				end
+			end
 			if frame.db.profile.tooltip12hr then
 				for i = 1, 4 do
 					tip:AddDoubleLine(
-						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t))],
-						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%I:%M", t+68400) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t+68400))],
+						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t))] .. " " .. invadeOrder[(pos%#invadeOrder)+1],
+						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%I:%M", t+68400) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t+68400))] .. " " .. invadeOrder[(pos+1)%#invadeOrder+1],
 						1, 1, 1, 1, 1, 1
 					)
+					pos = pos+2
 					t = t + 68400 + 68400
 				end
 			else
 				for i = 1, 4 do
 					tip:AddDoubleLine(
-						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t),
-						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%H:%M", t+68400),
+						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t) .. " " .. invadeOrder[(pos%#invadeOrder)+1],
+						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%H:%M", t+68400) .. " " .. invadeOrder[(pos+1)%#invadeOrder+1],
 						1, 1, 1, 1, 1, 1
 					)
 					t = t + 68400 + 68400
@@ -269,10 +280,10 @@ do
 	local GetAreaPOISecondsLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft
 	local isWaiting = false
 	local zonePOIIds = {
+		5970, -- Vol'dun
 		5964, -- Drustvar
 		5973, -- Zuldazar
 		5896, -- Tiragarde Sound
-		5970, -- Vol'dun
 		5969, -- Nazmir
 		5966, -- Stormsong Valley
 	}
@@ -285,25 +296,25 @@ do
 		236594, -- Interface/Icons/Achievement_PVP_A_H
 	}
 	local zoneNames = {
+		C_Map.GetMapInfo(864).name, -- Vol'dun
 		C_Map.GetMapInfo(896).name, -- Drustvar
 		C_Map.GetMapInfo(862).name, -- Zuldazar
 		C_Map.GetMapInfo(895).name, -- Tiragarde Sound
-		C_Map.GetMapInfo(864).name, -- Vol'dun
 		C_Map.GetMapInfo(863).name, -- Nazmir
 		C_Map.GetMapInfo(942).name, -- Stormsong Valley
 	}
 	local questIds = faction == "Horde" and {
+		53885, -- Vol'dun
 		54137, -- Drustvar
 		53883, -- Zuldazar
 		53939, -- Tiragarde Sound
-		53885, -- Vol'dun
 		54135, -- Nazmir
 		54132, -- Stormsong Valley
 	} or {
+		54134, -- Vol'dun
 		53701, -- Drustvar
 		54138, -- Zuldazar
 		53711, -- Tiragarde Sound
-		54134, -- Vol'dun
 		54136, -- Nazmir
 		51982, -- Stormsong Valley
 	}
@@ -337,6 +348,8 @@ do
 				local elapsed = 25200-timeLeftSeconds
 				local latestInvasionTime = curTime - elapsed
 				BFAInvasionTime = latestInvasionTime
+				frame.db.profile.lastInvasionMap = zoneNames[i]
+				-- print(zoneNames[(i%#zonePOIIds)+1])
 				break
 			end
 		end
@@ -438,6 +451,7 @@ frame:SetScript("OnEvent", function(f)
 			tooltipHideMedals = false,
 			zoneWarnings = true,
 			hideInRaid = false,
+			lastInvasionMap = nil,
 			mode = 1,
 		},
 	}
