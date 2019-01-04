@@ -86,9 +86,11 @@ do
 		tip:AddLine(L.nextInvasions)
 		if BFAInvasionTime then -- Have we seen our first invasion?
 			-- 19hrs * 60min = 1,140min = *60sec = 68,400sec
+			local pos_offset = 0
 			local elapsed = time() - BFAInvasionTime
 			while elapsed > 68400 do
 				elapsed = elapsed - 68400
+				pos_offset = pos_offset + 1
 			end
 			local t = 68400-elapsed
 			t = t+time()
@@ -102,7 +104,7 @@ do
 			if frame.db.profile.lastInvasionMap then
 				for k,v in pairs(invadeOrder) do
 					if v == frame.db.profile.lastInvasionMap then
-						pos = k
+						pos = (k + pos_offset - 1) % #invadeOrder + 1
 						-- print(invadeOrder[pos])
 					end
 				end
@@ -110,8 +112,8 @@ do
 			if frame.db.profile.tooltip12hr then
 				for i = 1, 4 do
 					tip:AddDoubleLine(
-						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t))] .. " " .. invadeOrder[(pos%#invadeOrder)+1],
-						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%I:%M", t+68400) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t+68400))] .. " " .. invadeOrder[(pos+1)%#invadeOrder+1],
+						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t))] .. " " .. invadeOrder[(pos % #invadeOrder) + 1],
+						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%I:%M", t+68400) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t+68400))] .. " " .. invadeOrder[(pos + 1)%#invadeOrder + 1],
 						1, 1, 1, 1, 1, 1
 					)
 					pos = pos+2
@@ -120,8 +122,8 @@ do
 			else
 				for i = 1, 4 do
 					tip:AddDoubleLine(
-						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t) .. " " .. invadeOrder[(pos%#invadeOrder)+1],
-						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%H:%M", t+68400) .. " " .. invadeOrder[(pos+1)%#invadeOrder+1],
+						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t) .. " " .. invadeOrder[(pos % #invadeOrder) + 1],
+						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%H:%M", t+68400) .. " " .. invadeOrder[(pos + 1) % #invadeOrder + 1],
 						1, 1, 1, 1, 1, 1
 					)
 					t = t + 68400 + 68400
@@ -349,7 +351,6 @@ do
 				local latestInvasionTime = curTime - elapsed
 				BFAInvasionTime = latestInvasionTime
 				frame.db.profile.lastInvasionMap = zoneNames[i]
-				-- print(zoneNames[(i%#zonePOIIds)+1])
 				break
 			end
 		end
