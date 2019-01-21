@@ -26,6 +26,64 @@ frame:SetScript("OnDragStop", function(f)
 	f.db.profile.position[3] = c
 	f.db.profile.position[4] = d
 end)
+local icons = faction == "Horde" and { -- icon background is faction color, icon graphic is zone being assaulted
+	236629, -- interface/icons/achievement_pvp_h_h
+	236628, -- interface/icons/achievement_pvp_h_a
+	236629, -- interface/icons/achievement_pvp_h_h
+	236628, -- interface/icons/achievement_pvp_h_a
+	236629, -- interface/icons/achievement_pvp_h_h
+	236628, -- interface/icons/achievement_pvp_h_a
+} or {
+	236594, -- interface/icons/achievement_pvp_a_h
+	236593, -- interface/icons/achievement_pvp_a_a
+	236594, -- interface/icons/achievement_pvp_a_h
+	236593, -- interface/icons/achievement_pvp_a_a
+	236594, -- interface/icons/achievement_pvp_a_h
+	236593, -- interface/icons/achievement_pvp_a_a
+}
+local zoneNames = {
+	C_Map.GetMapInfo(864).name, -- Vol'dun
+	C_Map.GetMapInfo(896).name, -- Drustvar
+	C_Map.GetMapInfo(862).name, -- Zuldazar
+	C_Map.GetMapInfo(895).name, -- Tiragarde Sound
+	C_Map.GetMapInfo(863).name, -- Nazmir
+	C_Map.GetMapInfo(942).name, -- Stormsong Valley
+}
+local zonePOIIds = {
+	5970, -- Vol'dun
+	5964, -- Drustvar
+	5973, -- Zuldazar
+	5896, -- Tiragarde Sound
+	5969, -- Nazmir
+	5966, -- Stormsong Valley
+}
+local questIds = faction == "Horde" and {
+	53885, -- Vol'dun
+	54137, -- Drustvar
+	53883, -- Zuldazar
+	53939, -- Tiragarde Sound
+	54135, -- Nazmir
+	54132, -- Stormsong Valley
+	[53885] = true, -- Vol'dun
+	[54137] = true, -- Drustvar
+	[53883] = true, -- Zuldazar
+	[53939] = true, -- Tiragarde Sound
+	[54135] = true, -- Nazmir
+	[54132] = true, -- Stormsong Valley
+} or {
+	54134, -- Vol'dun
+	53701, -- Drustvar
+	54138, -- Zuldazar
+	53711, -- Tiragarde Sound
+	54136, -- Nazmir
+	51982, -- Stormsong Valley
+	[54134] = true, -- Vol'dun
+	[53701] = true, -- Drustvar
+	[54138] = true, -- Zuldazar
+	[53711] = true, -- Tiragarde Sound
+	[54136] = true, -- Nazmir
+	[51982] = true, -- Stormsong Valley
+}
 do
 	local function openOpts()
 		EnableAddOn("BFAInvasionTimer_Options") -- Make sure it wasn't left disabled for whatever reason
@@ -51,7 +109,8 @@ do
 	local GameTooltip, WorldMapTooltip = GameTooltip, WorldMapTooltip
 	local FormatShortDate = FormatShortDate
 	ShowTip = function(tip)
-		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
+		local WarMode = C_PvP.IsWarModeActive() or (TALENT_WAR_MODE_BUTTON and TALENT_WAR_MODE_BUTTON:GetWarModeDesired())
+		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(WarMode and idWarMode or id)
 		if not wasEarnedByMe or not frame.db.profile.tooltipHideAchiev then
 			if wasEarnedByMe then
 				tip:AddDoubleLine(name, FormatShortDate(day, month, year), nil, nil, nil, .5, .5, .5)
@@ -59,8 +118,8 @@ do
 				tip:AddLine(name, nil, nil, nil, .5, .5, .5)
 			end
 			tip:AddLine(description, 1, 1, 1, true)
-			for i = 1, GetAchievementNumCriteria(id) do
-				local criteriaString, _, completed = GetAchievementCriteriaInfo(id, i)
+			for i = 1, GetAchievementNumCriteria(WarMode and idWarMode or id) do
+				local criteriaString, _, completed = GetAchievementCriteriaInfo(WarMode and idWarMode or id, i)
 				if completed == false then
 					criteriaString = "|CFF808080 - " .. criteriaString .. "|r"
 				else
@@ -71,15 +130,10 @@ do
 			tip:AddLine(" ")
 		end
 
-		local splitLine = false
 		if not frame.db.profile.tooltipHideMedals then
-			splitLine = true
 			-- Honorbound Service Medal / 7th Legion Service Medal
 			local nName, nAmount, nIcon = GetCurrencyInfo(faction == "Horde" and 1716 or 1717)
-			tip:AddDoubleLine(nName, ("|T%d:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
-		end
-
-		if splitLine then
+			tip:AddDoubleLine(nName, ("|T%d:16:16:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
 			tip:AddLine(" ")
 		end
 
@@ -87,8 +141,10 @@ do
 		if BFAInvasionTime then -- Have we seen our first invasion?
 			-- 19hrs * 60min = 1,140min = *60sec = 68,400sec
 			local elapsed = time() - BFAInvasionTime
+			local nextzone = BFAInvasionZone == 6 and 1 or BFAInvasionZone + 1
 			while elapsed > 68400 do
 				elapsed = elapsed - 68400
+				nextzone = nextzone == 6 and 1 or nextzone + 1
 			end
 			local t = 68400-elapsed
 			t = t+time()
@@ -100,20 +156,24 @@ do
 			if frame.db.profile.tooltip12hr then
 				for i = 1, 4 do
 					tip:AddDoubleLine(
-						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t))],
-						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%I:%M", t+68400) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t+68400))],
+						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t))].." |T"..icons[nextzone]..":16:16:0:0:64:64:4:60:4:60|t"..zoneNames[nextzone],
+						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%I:%M", t+68400) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t+68400))].." |T"..icons[nextzone == 6 and 1 or nextzone + 1]..":16:16:0:0:64:64:4:60:4:60|t"..zoneNames[nextzone == 6 and 1 or nextzone + 1],
 						1, 1, 1, 1, 1, 1
 					)
 					t = t + 68400 + 68400
+					nextzone = nextzone == 6 and 1 or nextzone + 1
+					nextzone = nextzone == 6 and 1 or nextzone + 1
 				end
 			else
 				for i = 1, 4 do
 					tip:AddDoubleLine(
-						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t),
-						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%H:%M", t+68400),
+						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t).." |T"..icons[nextzone]..":16:16:0:0:64:64:4:60:4:60|t"..zoneNames[nextzone],
+						_G["WEEKDAY_"..upper(date("%A", t+68400))].." "..date("%H:%M", t+68400).." |T"..icons[nextzone == 6 and 1 or nextzone + 1]..":16:16:0:0:64:64:4:60:4:60|t"..zoneNames[nextzone == 6 and 1 or nextzone + 1],
 						1, 1, 1, 1, 1, 1
 					)
 					t = t + 68400 + 68400
+					nextzone = nextzone == 6 and 1 or nextzone + 1
+					nextzone = nextzone == 6 and 1 or nextzone + 1
 				end
 			end
 		else
@@ -148,23 +208,8 @@ frame.RearrangeBar = RearrangeBar
 
 local ChangeBarColor
 do
-	local quests = faction == "Horde" and {
-		[54137] = true, -- Drustvar
-		[53883] = true, -- Zuldazar
-		[53939] = true, -- Tiragarde Sound
-		[53885] = true, -- Vol'dun
-		[54135] = true, -- Nazmir
-		[54132] = true, -- Stormsong Valley
-	} or {
-		[53701] = true, -- Drustvar
-		[54138] = true, -- Zuldazar
-		[53711] = true, -- Tiragarde Sound
-		[54134] = true, -- Vol'dun
-		[54136] = true, -- Nazmir
-		[51982] = true, -- Stormsong Valley
-	}
 	ChangeBarColor = function(id)
-		if quests[id] then
+		if questIds[id] then
 			frame.Bar:Set("BFAInvasionTimer:complete", 1)
 			frame.Bar:SetColor(unpack(frame.db.profile.colorComplete))
 		end
@@ -268,45 +313,6 @@ local justLoggedIn = true
 do
 	local GetAreaPOISecondsLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft
 	local isWaiting = false
-	local zonePOIIds = {
-		5964, -- Drustvar
-		5973, -- Zuldazar
-		5896, -- Tiragarde Sound
-		5970, -- Vol'dun
-		5969, -- Nazmir
-		5966, -- Stormsong Valley
-	}
-	local icons = {
-		236594, -- Interface/Icons/Achievement_PVP_A_H
-		236645, -- Interface/Icons/Achievement_PVP_O_A
-		236594, -- Interface/Icons/Achievement_PVP_A_H
-		236645, -- Interface/Icons/Achievement_PVP_O_A
-		236645, -- Interface/Icons/Achievement_PVP_O_A
-		236594, -- Interface/Icons/Achievement_PVP_A_H
-	}
-	local zoneNames = {
-		C_Map.GetMapInfo(896).name, -- Drustvar
-		C_Map.GetMapInfo(862).name, -- Zuldazar
-		C_Map.GetMapInfo(895).name, -- Tiragarde Sound
-		C_Map.GetMapInfo(864).name, -- Vol'dun
-		C_Map.GetMapInfo(863).name, -- Nazmir
-		C_Map.GetMapInfo(942).name, -- Stormsong Valley
-	}
-	local questIds = faction == "Horde" and {
-		54137, -- Drustvar
-		53883, -- Zuldazar
-		53939, -- Tiragarde Sound
-		53885, -- Vol'dun
-		54135, -- Nazmir
-		54132, -- Stormsong Valley
-	} or {
-		53701, -- Drustvar
-		54138, -- Zuldazar
-		53711, -- Tiragarde Sound
-		54134, -- Vol'dun
-		54136, -- Nazmir
-		51982, -- Stormsong Valley
-	}
 	FindInvasion = function()
 		local mode = frame.db.profile.mode
 		local found = false
@@ -318,7 +324,7 @@ do
 				if mode == 2 then
 					StartBroker(zoneNames[i], timeLeftSeconds, icons[i])
 				else
-					StartBar(zoneNames[i], timeLeftSeconds, questIds[i], icons[i])
+					StartBar(format(L.underAttack,zoneNames[i]), timeLeftSeconds, questIds[i], icons[i])
 					frame:RegisterEvent("QUEST_TURNED_IN")
 				end
 				Timer(timeLeftSeconds+60, FindInvasion)
@@ -326,7 +332,7 @@ do
 				-- Not fighting a boss, didn't just log in, assault has just spawned (7hrs - 10min = 24600), feature is enabled
 				if not IsEncounterInProgress() and not justLoggedIn and timeLeftSeconds > 24600 and frame.db.profile.zoneWarnings then
 					FlashClientIcon()
-					local text = "|T".. icons[i] ..":15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(zoneNames[i])
+					local text = "|T".. icons[i] ..":16:16:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(zoneNames[i])
 					print("|cFF33FF99BFAInvasionTimer|r:", text)
 					RaidNotice_AddMessage(RaidBossEmoteFrame, text, {r=1, g=1, b=1})
 					PlaySound(8959, "Master", false) -- SOUNDKIT.RAID_WARNING
@@ -337,6 +343,7 @@ do
 				local elapsed = 25200-timeLeftSeconds
 				local latestInvasionTime = curTime - elapsed
 				BFAInvasionTime = latestInvasionTime
+				BFAInvasionZone = i
 				break
 			end
 		end
@@ -345,8 +352,10 @@ do
 			if BFAInvasionTime then
 				-- 19hrs * 60min = 1,140min = *60sec = 68,400sec
 				local elapsed = time() - BFAInvasionTime
+				local nextzone = BFAInvasionZone == 6 and 1 or BFAInvasionZone + 1
 				while elapsed > 68400 do
 					elapsed = elapsed - 68400
+					nextzone = nextzone == 6 and 1 or nextzone + 1
 				end
 				local t = 68400-elapsed
 
@@ -367,9 +376,9 @@ do
 				end
 
 				if mode == 2 then
-					StartBroker(L.next, t, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
+					StartBroker(L.next..": "..zoneNames[nextzone], t, icons[nextzone])
 				else
-					StartBar(L.next, t, 0, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
+					StartBar(L.next..": "..zoneNames[nextzone], t, 0, icons[nextzone])
 					frame:UnregisterEvent("QUEST_TURNED_IN")
 				end
 
