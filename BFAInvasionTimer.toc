@@ -13,7 +13,7 @@
 ## Notes-koKR: Shows the Battle for Azeroth assault/invasion timer.
 ## Notes-ptBR: Shows the Battle for Azeroth assault/invasion timer.
 ## Notes-ruRU: Shows the Battle for Azeroth assault/invasion timer.
-## SavedVariables: BFAInvasionTimerDB, BFAInvasionTime
+## SavedVariables: BFAInvasionTimerDB, BFAInvasionTime, BFAInvasionData
 
 ## X-Category: Miscellaneous
 ## X-Website: https://github.com/funkydude/BFAInvasionTimer
