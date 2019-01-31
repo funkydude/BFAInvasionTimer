@@ -398,13 +398,15 @@ do
 
 		if not found then
 			if BFAInvasionData[1] ~= 0 then
-				-- 19hrs * 60min = 1,140min = *60sec = 68,400sec
+				local elapsed = time() - BFAInvasionData[1]
 				local lastKnownInvasionZone = BFAInvasionData[2]
+				-- 19hrs * 60min = 1,140min = *60sec = 68,400sec
 				while elapsed > 68400 do
 					elapsed = elapsed - 68400
 					lastKnownInvasionZone = lastKnownInvasionZone + 1
 					if lastKnownInvasionZone == 7 then lastKnownInvasionZone = 1 end
 				end
+				local t = 68400-elapsed
 				local nextAvailableZone = lastKnownInvasionZone == 6 and 1 or lastKnownInvasionZone+1
 
 				if t > 43200 then -- 12hrs * 60min = 720min = *60sec = 43,200sec
