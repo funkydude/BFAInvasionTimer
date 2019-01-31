@@ -88,10 +88,10 @@ do
 				local criteriaString, _, completed = GetAchievementCriteriaInfo(id, i)
 				if completed == false then
 					criteriaString = "|CFF808080 - " .. criteriaString .. "|r"
-					coloredZones[i] = "|CFF808080" .. zoneNames[achievementPlacement[i]] .. "|r "
+					coloredZones[achievementPlacement[i]] = "|CFF808080" .. zoneNames[achievementPlacement[i]] .. "|r "
 				else
 					criteriaString = "|CFF00FF00 - " .. criteriaString .. "|r"
-					coloredZones[i] = "|CFF00FF00" .. zoneNames[achievementPlacement[i]] .. "|r "
+					coloredZones[achievementPlacement[i]] = "|CFF00FF00" .. zoneNames[achievementPlacement[i]] .. "|r "
 				end
 				tip:AddLine(criteriaString)
 			end
@@ -100,9 +100,9 @@ do
 			for i = 1, GetAchievementNumCriteria(id) do
 				local _, _, completed = GetAchievementCriteriaInfo(id, i)
 				if completed == false then
-					coloredZones[i] = "|CFF808080" .. zoneNames[achievementPlacement[i]] .. "|r "
+					coloredZones[achievementPlacement[i]] = "|CFF808080" .. zoneNames[achievementPlacement[i]] .. "|r "
 				else
-					coloredZones[i] = "|CFF00FF00" .. zoneNames[achievementPlacement[i]] .. "|r "
+					coloredZones[achievementPlacement[i]] = "|CFF00FF00" .. zoneNames[achievementPlacement[i]] .. "|r "
 				end
 			end
 		end
