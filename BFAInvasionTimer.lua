@@ -427,9 +427,9 @@ do
 
 				if mode == 2 then
 					-- XXX remove BFAInvasionData[2] check
-					StartBroker(BFAInvasionData[2] == 0 and L.next or zoneNames[nextAvailableZone], t, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
+					StartBroker(BFAInvasionData[2] == 0 and L.next or L.next:format(zoneNames[nextAvailableZone]), t, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
 				else
-					StartBar(BFAInvasionData[2] == 0 and L.next or zoneNames[nextAvailableZone], t, 0, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
+					StartBar(BFAInvasionData[2] == 0 and L.next or L.next:format(zoneNames[nextAvailableZone]), t, 0, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
 					frame:UnregisterEvent("QUEST_TURNED_IN")
 				end
 
