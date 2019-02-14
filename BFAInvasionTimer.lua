@@ -543,6 +543,10 @@ frame:SetScript("OnEvent", function(f)
 		if BFAInvasionData[1] == 0 then
 			print("|cFF33FF99BFAInvasionTimer|r:", L.firstRunWarning)
 		end
+		local x = GetLocale()
+		if x == "frFR" or x == "ptBR" or x == "itIT" then -- XXX temp
+			print("|cFF33FF99BFAInvasionTimer|r is missing locale for", x, "and needs your help! Please visit the project page on GitHub for more info.")
+		end
 	end)
 
 	if f.db.profile.mode == 1 then
