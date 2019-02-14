@@ -245,7 +245,7 @@ local acOptions = {
 						bit.db.profile.alignTime = value
 						bit.Bar.candyBarDuration:SetJustifyH(value)
 					end,
-					disabled = disabled,
+					disabled = function() return disabled() or not bit.db.profile.timeText end,
 				},
 				growUp = {
 					type = "toggle",
