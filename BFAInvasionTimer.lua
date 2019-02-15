@@ -491,6 +491,7 @@ frame:SetScript("OnEvent", function(f)
 			height = 20,
 			icon = true,
 			timeText = true,
+			labelText = true,
 			fill = false,
 			growUp = false,
 			alignText = "LEFT",
