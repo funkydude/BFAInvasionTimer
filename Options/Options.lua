@@ -425,4 +425,3 @@ acOptions.args.profiles.order = 3
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
 acd:SetDefaultSize(acOptions.name, 420, 590)
-
