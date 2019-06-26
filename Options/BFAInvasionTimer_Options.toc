@@ -1,4 +1,4 @@
-## Interface: 80100
+## Interface: 80200
 ## Title: BFAInvasionTimer_Options
 ## Author: Funkydude
 ## Notes: BFAInvasionTimer Configuration Options.
