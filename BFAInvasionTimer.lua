@@ -72,7 +72,7 @@ do
 		3, -- Zuldazar
 	}
 	--13317 pvp achiev
-	local GameTooltip = GameTooltip
+	local tt = CreateFrame("GameTooltip", "BFAITtooltip", UIParent, "GameTooltipTemplate")
 	local FormatShortDate = FormatShortDate
 	ShowTip = function(tip)
 		local coloredZones = {}
@@ -182,13 +182,13 @@ do
 		end
 	end
 	HideTip = function()
-		GameTooltip:Hide()
+		tt:Hide()
 	end
 	OnEnter = function(f)
-		GameTooltip:SetOwner(f, "ANCHOR_NONE")
-		GameTooltip:SetPoint("BOTTOM", f, "TOP")
-		ShowTip(GameTooltip)
-		GameTooltip:Show()
+		tt:SetOwner(f, "ANCHOR_NONE")
+		tt:SetPoint("BOTTOM", f, "TOP")
+		ShowTip(tt)
+		tt:Show()
 	end
 end
 
