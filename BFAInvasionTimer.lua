@@ -106,11 +106,6 @@ do
 				end
 			end
 		end
-		-- XXX remove BFAInvasionData[2] check
-		if BFAInvasionData[2] == 0 then
-			coloredZones = {"", "", "", "", "", ""}
-		end
-		-- XXX end
 
 		local splitLine = false
 		if not frame.db.profile.tooltipHideMedals then
@@ -422,10 +417,9 @@ do
 				end
 
 				if mode == 2 then
-					-- XXX remove BFAInvasionData[2] check
-					StartBroker(BFAInvasionData[2] == 0 and L.next or L.next:format(zoneNames[nextAvailableZone]), t, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
+					StartBroker(L.next:format(zoneNames[nextAvailableZone]), t, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
 				else
-					StartBar(BFAInvasionData[2] == 0 and L.next or L.next:format(zoneNames[nextAvailableZone]), t, 0, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
+					StartBar(L.next:format(zoneNames[nextAvailableZone]), t, 0, 1044517) -- 1044517 = Interface/Icons/Achievement_Garrison_Invasion
 					frame:UnregisterEvent("QUEST_TURNED_IN")
 				end
 
@@ -466,11 +460,7 @@ frame:SetScript("OnEvent", function(f)
 	f:UnregisterEvent("PLAYER_LOGIN")
 
 	if type(BFAInvasionData) ~= "table" then
-		if type(BFAInvasionTime) == "number" then
-			BFAInvasionData = {BFAInvasionTime, 0}
-		else
-			BFAInvasionData = {0, 0}
-		end
+		BFAInvasionData = {0, 0}
 	end
 
 	-- saved variables database setup
