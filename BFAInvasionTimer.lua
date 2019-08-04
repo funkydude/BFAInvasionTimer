@@ -54,7 +54,7 @@ local zoneNames = {
 
 local OnEnter, ShowTip, HideTip
 do
-	local id = faction == "Horde" and 13284 or 13283 -- Frontline Warrior
+	local idNormal = faction == "Horde" and 13284 or 13283 -- Frontline Warrior
 	local idWarMode = faction == "Horde" and 13388 or 13387 -- Frontline Veteran
 	local achievementPlacement = faction == "Horde" and {
 		4, -- Tiragarde Sound
@@ -74,8 +74,10 @@ do
 	--13317 pvp achiev
 	local tt = CreateFrame("GameTooltip", "BFAITtooltip", UIParent, "GameTooltipTemplate")
 	local FormatShortDate = FormatShortDate
+	local IsWarModeDesired = C_PvP.IsWarModeDesired
 	ShowTip = function(tip)
 		local coloredZones = {}
+		local id = IsWarModeDesired() and idWarMode or idNormal
 		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
 		if not wasEarnedByMe or not frame.db.profile.tooltipHideAchiev then
 			if wasEarnedByMe then
