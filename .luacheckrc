@@ -9,6 +9,8 @@ ignore = {
 	"112/SlashCmdList",
 }
 globals = {
+	"BFAInvasionData",
+	"BFAInvasionTimerDB",
 	"CreateFrame",
 	"C_AreaPoiInfo",
 	"C_CurrencyInfo",
