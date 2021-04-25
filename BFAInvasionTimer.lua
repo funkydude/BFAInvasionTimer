@@ -1,5 +1,5 @@
 
-local name, mod = ...
+local addonName, mod = ...
 local L = mod.L
 local candy = LibStub("LibCandyBar-3.0")
 local media = LibStub("LibSharedMedia-3.0")
@@ -8,7 +8,7 @@ local Timer = C_Timer.After
 local faction = UnitFactionGroup("player")
 if faction == "Neutral" then return end
 
-local frame = CreateFrame("Frame", name, UIParent)
+local frame = CreateFrame("Frame", addonName, UIParent)
 frame:SetPoint("CENTER", UIParent, "CENTER")
 frame:SetWidth(180)
 frame:SetHeight(15)
@@ -30,9 +30,9 @@ do
 	local function openOpts()
 		EnableAddOn("BFAInvasionTimer_Options") -- Make sure it wasn't left disabled for whatever reason
 		LoadAddOn("BFAInvasionTimer_Options")
-		LibStub("AceConfigDialog-3.0"):Open(name)
+		LibStub("AceConfigDialog-3.0"):Open(addonName)
 	end
-	SlashCmdList[name] = openOpts
+	SlashCmdList[addonName] = openOpts
 	SLASH_BFAInvasionTimer1 = "/bit"
 	SLASH_BFAInvasionTimer2 = "/bfainvasiontimer"
 	frame:SetScript("OnMouseUp", function(_, btn)
@@ -374,7 +374,7 @@ do
 				-- Not fighting a boss, didn't just log in, assault has just spawned (7hrs - 10min = 24600), feature is enabled
 				if not IsEncounterInProgress() and not justLoggedIn and timeLeftSeconds > 24600 and frame.db.profile.zoneWarnings then
 					FlashClientIcon()
-					local text = "|T".. icons[i] ..":15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(zoneNames[i])
+					local text = L.underAttack:format(icons[i], zoneNames[i])
 					print("|cFF33FF99BFAInvasionTimer|r:", text)
 					RaidNotice_AddMessage(RaidBossEmoteFrame, text, {r=1, g=1, b=1})
 					PlaySound(8959, "Master", false) -- SOUNDKIT.RAID_WARNING
@@ -510,7 +510,7 @@ frame:SetScript("OnEvent", function(f)
 	f.bg = bg
 	local header = f:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
 	header:SetAllPoints(f)
-	header:SetText(name)
+	header:SetText(addonName)
 	f.header = header
 
 	if f.db.profile.lock then

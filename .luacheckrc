@@ -7,14 +7,17 @@ exclude_files = {
 ignore = {
 	"111/SLASH_BFAInvasionTimer[12]", -- slash handlers
 	"112/SlashCmdList",
+	"213/i", -- unused loop variable
 }
 globals = {
 	"BFAInvasionData",
 	"BFAInvasionTimerDB",
+	"BFAInvasionTimer",
 	"CreateFrame",
 	"C_AreaPoiInfo",
 	"C_CurrencyInfo",
 	"C_Map",
+	"C_PvP",
 	"C_QuestLog",
 	"C_Timer",
 	"date",
@@ -36,5 +39,6 @@ globals = {
 	"SecondsToTime",
 	"time",
 	"UIParent",
+	"UnitFactionGroup",
 	"WorldMapFrame",
 }

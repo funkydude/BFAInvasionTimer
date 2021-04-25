@@ -387,7 +387,7 @@ local acOptions = {
 					type = "toggle",
 					name = L.hideInRaid,
 					order = 29,
-					disabled = function() 
+					disabled = function()
 						return bit.db.profile.mode == 2 or bit.db.profile.mode == 3
 					end,
 				},
