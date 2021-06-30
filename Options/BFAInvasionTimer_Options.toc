@@ -1,4 +1,4 @@
-## Interface: 90005
+## Interface: 90100
 ## Title: BFAInvasionTimer_Options
 ## Author: Funkydude
 ## Notes: BFAInvasionTimer Configuration Options.
