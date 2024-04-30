@@ -1,4 +1,4 @@
-## Interface: 100206
+## Interface: 40400
 ## Title: BFAInvasionTimer_Options
 ## Author: Funkydude
 ## Notes: BFAInvasionTimer Configuration Options.
@@ -14,6 +14,7 @@
 ## Notes-ruRU: BFAInvasionTimer параметры настроек.
 ## Version: @project-version@
 ## LoadOnDemand: 1
+## DefaultState: disabled
 ## Dependencies: BFAInvasionTimer
 
 ## X-Category: Miscellaneous
@@ -22,8 +23,4 @@
 ## X-Curse-Project-ID: 309055
 ## X-WoWI-ID: 24870
 ## X-Wago-ID: BO67BXN3
-
-embeds.xml
-locales.xml
-Options.lua
 
