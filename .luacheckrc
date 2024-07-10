@@ -14,6 +14,7 @@ globals = {
 	"BFAInvasionTimerDB",
 	"BFAInvasionTimer",
 	"CreateFrame",
+	"C_AddOns",
 	"C_AreaPoiInfo",
 	"C_CurrencyInfo",
 	"C_Map",

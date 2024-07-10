@@ -28,6 +28,8 @@ frame:SetScript("OnDragStop", function(f)
 end)
 do
 	local function openOpts()
+		local EnableAddOn = C_AddOns.EnableAddOn or EnableAddOn
+		local LoadAddOn = C_AddOns.LoadAddOn or LoadAddOn
 		EnableAddOn("BFAInvasionTimer_Options") -- Make sure it wasn't left disabled for whatever reason
 		LoadAddOn("BFAInvasionTimer_Options")
 		LibStub("AceConfigDialog-3.0"):Open(addonName)
