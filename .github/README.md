@@ -13,4 +13,5 @@
 * Right-click the bar anchor
 
 ## Download
-<https://www.curseforge.com/wow/addons/bfainvasiontimer>
+* <https://www.curseforge.com/wow/addons/bfainvasiontimer>
+* <https://addons.wago.io/addons/bfainvasiontimer>
