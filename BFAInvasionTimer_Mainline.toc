@@ -1,7 +1,7 @@
-## Interface: 110105, 110107, 110100
+## Interface: 120001, 110207, 120000
 ## Version: @project-version@
 ## Title: BFAInvasionTimer
-## Author: Funkydude
+## Author: Funkeh
 ## Notes: Shows the Battle for Azeroth assault/invasion timer.
 ## Notes-esES: Shows the Battle for Azeroth assault/invasion timer.
 ## Notes-esMX: Shows the Battle for Azeroth assault/invasion timer.
