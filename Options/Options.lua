@@ -178,12 +178,7 @@ local acOptions = {
 					order = 10,
 					set = function(_, value)
 						bit.db.profile.icon = value
-						if value then
-							local icon = bit.Bar:Get("BFAInvasionTimer:icon")
-							bit.Bar:SetIcon(icon)
-						else
-							bit.Bar:SetIcon()
-						end
+						bit.Bar:SetIconVisibility(value)
 					end,
 					disabled = disabled,
 				},
