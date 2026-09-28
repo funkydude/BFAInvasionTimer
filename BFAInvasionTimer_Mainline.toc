@@ -1,4 +1,5 @@
-## Interface: 120100, 120005, 120007
+## Interface: 120100, 120105, 120007
+## AllowLoadGameType: standard
 ## Version: @project-version@
 ## Title: BFAInvasionTimer
 ## Author: Funkeh
