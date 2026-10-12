@@ -239,6 +239,7 @@ do
 		bar:SetScript("OnLeave", HideTip)
 		bar:SetParent(frame)
 		bar:SetLabel(text)
+		bar:SetPauseWhenDone(true)
 		bar.candyBarLabel:SetJustifyH(frame.db.profile.alignText)
 		bar.candyBarDuration:SetJustifyH(frame.db.profile.alignTime)
 		bar:SetDuration(timeLeft)
@@ -372,11 +373,11 @@ do
 				Timer(timeLeftSeconds+60, FindInvasion)
 				found = true
 				-- Not fighting a boss, didn't just log in, assault has just spawned (7hrs - 10min = 24600), feature is enabled
-				if not IsEncounterInProgress() and not justLoggedIn and timeLeftSeconds > 24600 and frame.db.profile.zoneWarnings then
+				if not C_InstanceEncounter.IsEncounterInProgress() and not justLoggedIn and timeLeftSeconds > 24600 and frame.db.profile.zoneWarnings then
 					FlashClientIcon()
 					local text = L.underAttack:format(icons[i], zoneNames[i])
 					print("|cFF33FF99BFAInvasionTimer|r:", text)
-					RaidNotice_AddMessage(RaidBossEmoteFrame, text, {r=1, g=1, b=1})
+					RaidWarningUtil.AddMessage(text, {r=1, g=1, b=1})
 					PlaySound(8959, "Master", false) -- SOUNDKIT.RAID_WARNING
 				end
 				justLoggedIn = false
@@ -532,10 +533,6 @@ frame:SetScript("OnEvent", function(f)
 		justLoggedIn = false
 		if BFAInvasionData[1] == 0 then
 			print("|cFF33FF99BFAInvasionTimer|r:", L.firstRunWarning)
-		end
-		local x = GetLocale()
-		if x == "koKR" then -- XXX temp, Options/Locales needs updated
-			print("|cFF33FF99BFAInvasionTimer|r is missing locale for", x, "and needs your help! Please visit the project page on GitHub for more info.")
 		end
 	end)
 
